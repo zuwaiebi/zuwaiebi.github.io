@@ -186,7 +186,8 @@ function populateTodayFlavor() {
 }
 
 function displayFlavorCard(cardContainer, textNode, nameNode, codeNode, card) {
-  textNode.textContent = card.flavor;
+  // カード名を伏せ字にして表示
+  textNode.textContent = maskCardName(card.flavor, card.name); 
   nameNode.textContent = card.name;
   codeNode.textContent = `(${card.code})`;
   const imagePath = `images/${encodeURIComponent(card.image)}`;
@@ -250,7 +251,7 @@ function renderQuizQuestion() {
   btnSubmit.classList.add('main-button--disabled');
   choicesGrid.innerHTML = '';
 
-  quizQuestionText.textContent = question.answer.flavor;
+  quizQuestionText.textContent = maskCardName(question.answer.flavor, question.answer.name);
 
   question.choices.forEach((choice, index) => {
     const choiceCard = document.createElement('button');
@@ -430,6 +431,17 @@ function getScatteredValueFromDate(date) {
     hash |= 0;
   }
   return (Math.abs(hash) % 12477) + 1;
+}
+
+/**
+ * フレーバーテキスト内のカード名を伏せ字にする
+ */
+function maskCardName(flavor, cardName) {
+  if (!flavor || !cardName) return flavor;
+  // 正規表現でカード名を検索（エスケープ処理付き）
+  const escapedName = cardName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const regex = new RegExp(escapedName, 'g');
+  return flavor.replace(regex, '？？？？？');
 }
 
 initApp();
