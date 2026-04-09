@@ -251,7 +251,7 @@ function renderQuizQuestion() {
   btnSubmit.classList.add('main-button--disabled');
   choicesGrid.innerHTML = '';
 
-  quizQuestionText.textContent = maskCardName(question.answer.flavor, question.answer.name);
+  quizQuestionText.innerHTML = maskCardName(question.answer.flavor, question.answer.name);
 
   question.choices.forEach((choice, index) => {
     const choiceCard = document.createElement('button');
@@ -434,14 +434,25 @@ function getScatteredValueFromDate(date) {
 }
 
 /**
- * フレーバーテキスト内のカード名を伏せ字にする
+ * フレーバーテキスト内のカード名を、5色の「？」に置き換える
  */
 function maskCardName(flavor, cardName) {
   if (!flavor || !cardName) return flavor;
+
+  // 各文字に適用する色のクラス名（CSSで定義します）
+  const colors = ['q-yellow', 'q-blue', 'q-purple', 'q-red', 'q-green'];
+  
+  // 「？」を5色分連結したHTML文字列を作成
+  const coloredMask = colors
+    .map(color => `<span class="${color}">？</span>`)
+    .join('');
+
   // 正規表現でカード名を検索（エスケープ処理付き）
   const escapedName = cardName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const regex = new RegExp(escapedName, 'g');
-  return flavor.replace(regex, '？？？？？');
+
+  // HTMLとして挿入するため、この時点では文字列として返します
+  return flavor.replace(regex, coloredMask);
 }
 
 initApp();

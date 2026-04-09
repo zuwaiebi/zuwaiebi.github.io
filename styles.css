@@ -464,3 +464,17 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+/* 伏せ字（？）の色分け */
+.q-yellow { color: #d4c03f; font-weight: bold; }
+.q-blue   { color: #4db5f7; font-weight: bold; }
+.q-purple { color: #b388ff; font-weight: bold; }
+.q-red    { color: #f05b60; font-weight: bold; }
+.q-green  { color: #78bf8d; font-weight: bold; }
+
+/* 既存の .question-text や .flavor-card__text で 
+   innerHTML を使うため、念のため色を継承させる */
+.question-text span, 
+.flavor-card__text span {
+  display: inline-block;
+}
