@@ -250,7 +250,7 @@ function renderQuizQuestion() {
   btnSubmit.classList.add('main-button--disabled');
   choicesGrid.innerHTML = '';
 
-  quizQuestionText.textContent = question.answer.flavor;
+  quizQuestionText.textContent = maskCardName(question.answer.flavor, question.answer.name);
 
   question.choices.forEach((choice, index) => {
     const choiceCard = document.createElement('button');
@@ -429,7 +429,14 @@ function getScatteredValueFromDate(date) {
     hash = ((hash << 5) + hash) + char;
     hash |= 0;
   }
-  return (Math.abs(hash) % 12477) + 1;
+  return (Math.abs(hash) % 12568) + 1;
 }
 
 initApp();
+function maskCardName(flavor, cardName) {
+  if (!flavor || !cardName) return flavor;
+  // 正規表現でカード名を検索（エスケープ処理付き）
+  const escapedName = cardName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const regex = new RegExp(escapedName, 'g');
+  return flavor.replace(regex, '？？？？？');
+}
