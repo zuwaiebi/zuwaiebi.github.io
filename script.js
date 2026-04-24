@@ -303,6 +303,7 @@ function processAnswer(isTimeout) {
   clearQuizTimer();
   const question = gameState.questions[currentQuestionIndex];
   const selected = isTimeout ? null : question.choices[selectedChoiceId];
+  selectedChoiceId = null; // Prevent multiple submissions during feedback display
   const correct = question.answer;
   const isCorrect = selected && selected.name === correct.name && selected.code === correct.code;
 
@@ -339,7 +340,7 @@ function processAnswer(isTimeout) {
 }
 
 function startQuizTimer() {
-  let seconds = 60;
+  let seconds = 30;
   quizTimer.textContent = `${seconds}`;
   clearQuizTimer();
   timerId = setInterval(() => {
