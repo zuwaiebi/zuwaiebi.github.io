@@ -231,11 +231,22 @@ function generateQuestions() {
 }
 
 function makeChoices(answerCard) {
-  const choices = [answerCard];
-  const others = cards.filter((card) => card !== answerCard);
-  shuffleArray(others);
-  for (let i = 0; i < 3 && i < others.length; i += 1) {
-    choices.push(others[i]);
+  const answerIndex = cards.findIndex(card => card.name === answerCard.name && card.code === answerCard.code);
+  const minIndex = Math.max(0, answerIndex - 50);
+  const maxIndex = Math.min(cards.length - 1, answerIndex + 50);
+  const nearbyCards = cards.slice(minIndex, maxIndex + 1).filter(card => card !== answerCard);
+
+  let choices = [answerCard];
+  if (nearbyCards.length >= 3) {
+    shuffleArray(nearbyCards);
+    choices.push(...nearbyCards.slice(0, 3));
+  } else {
+    // Fallback to original method if not enough nearby cards
+    const others = cards.filter((card) => card !== answerCard);
+    shuffleArray(others);
+    for (let i = 0; i < 3 && i < others.length; i += 1) {
+      choices.push(others[i]);
+    }
   }
   shuffleArray(choices);
   return choices;
